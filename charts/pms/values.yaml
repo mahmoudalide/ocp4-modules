@@ -1,0 +1,60 @@
+component: pms
+part-of: mosip
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+exportLogs: enabled  # Let filebeat export the logs
+
+ingress:
+   namespace: default
+artifactoryUrl: http://artifactory-service.default:80/ 
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+probe:
+  initialDelay: 30  # Seconds
+  period: 30 # Seconds
+imagePullPolicy: Always
+
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  partner:
+    serviceName: pms-partner-manager-service
+    dockerImage: mosipid/partner-management-service:1.1.5
+    containerPort: 9109
+    servicePort: 80
+    ingressPath: /v1/partnermanager
+    healthUrl: /v1/partnermanager/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  policy:
+    serviceName: pms-policy-manager-service
+    dockerImage: mosipid/policy-management-service:1.1.5
+    containerPort: 9107
+    servicePort: 80
+    ingressPath: /v1/policymanager
+    healthUrl: /v1/policymanager/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  ui:
+    serviceName: pms-ui
+    dockerImage: mosipdev/pmp-ui:develop
+    containerPort: 80
+    servicePort: 80
+    apiHost: https://console.apps.mzuat.rnp.ma/v1/
+    ingressPath: /pmp-ui
+domain: apps.mzuat.rnp.ma

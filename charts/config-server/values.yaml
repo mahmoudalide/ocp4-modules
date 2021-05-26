@@ -1,0 +1,47 @@
+name: config-server # Will be used as service name too
+docker:
+  image: mosipid/sandbox-config-server:1.1.0
+  containerPort: 51000
+  servicePort: 80
+jarName: kernel-config-server # Without .jar. Used locally for Docker
+component: config-server
+
+domain: apps.mzuat.rnp.ma
+internalDomain: mzworker0.sb 
+
+exportLogs: enabled  # Let filebeat export the logs
+
+encryptKey: '' # Passed diretly via command line
+
+sandboxPublicUrl: https://console.apps.mzuat.rnp.ma
+
+gitRepo:
+  uri: https://github.com/mosip/mosip-config
+  searchFolders: sandbox
+  private: False 
+  username:     
+  password: '' # Passed directly via command line
+
+localRepo:
+  enabled: True
+  mountPath: /var/lib/config_repo
+  pv:
+    name: config-server-pv
+    size: 10Mi
+  pvc:
+    name: config-server-pvc
+    size: 10Mi # Should not exceed pv size
+  sc:
+    name: "nfs-provisioner"
+  nfs:
+    server: 10.230.80.5
+    path: /srv/nfs/mosip/mosip-config 
+
+services:
+  config_server:
+    podconfig:
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+

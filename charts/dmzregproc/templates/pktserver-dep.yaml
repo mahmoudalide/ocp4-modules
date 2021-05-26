@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.services.pktserver.serviceName }} 
+  namespace: {{ .Release.Namespace }} 
+  labels:
+    app: {{ .Values.services.pktserver.serviceName }}
+spec:
+  {{ $podconfig := .Values.services.pktserver.podconfig }}
+  replicas: {{ $podconfig.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.services.pktserver.serviceName }}
+  minReadySeconds: {{ $podconfig.minReadySeconds }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: {{ $podconfig.maxUnavailable }}
+      maxSurge: {{ $podconfig.maxSurge }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.services.pktserver.serviceName }} 
+        exportLogs: {{ .Values.exportLogs }}
+    spec:
+      {{- include "dockerHubSecret" .  | indent 6}}
+      containers:
+      - name: {{ .Values.services.pktserver.serviceName }} 
+        image: {{ .Values.services.pktserver.dockerImage }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        {{- include "resourcesDefinition" (dict "res" $podconfig.resources) | indent 8 }}
+        env:
+        - name: JDK_JAVA_OPTIONS
+          value: {{ $podconfig.java_opts }}
+        ports: 
+        - containerPort: {{ .Values.services.pktserver.ports.containerPort }}
+        #TODO: Put health check
+        volumeMounts:
+        - name: landing-zone
+          mountPath: /home/ftp1/LANDING_ZONE  # Hardcoded in Dockerfile
+      volumes:
+      - name: landing-zone
+        persistentVolumeClaim:
+          claimName: {{ .Values.services.pktserver.pvc.name }}
+

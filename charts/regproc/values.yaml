@@ -1,0 +1,333 @@
+component: regproc
+part-of: mosip
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+storageClass: dm-storage-class  # See sc, pv templates
+exportLogs: enabled  # Let filebeat export the logs
+
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+probe:
+  initialDelay: 180 # Seconds
+  period: 30 # Seconds
+
+ingress:
+   namespace: default
+
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-snapshot-local/io/mosip/kernel/kernel-auth-adapter/1.2.0-SNAPSHOT/kernel-auth-adapter-1.2.0-SNAPSHOT-regproc-20201209055103.jar
+
+imagePullPolicy: Always 
+
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  camel:
+    serviceName: regproc-camel-stage 
+    dockerImage: mosipid/registration-processor-common-camel-bridge:1.1.5
+    ports:
+      eventbusPort: 5723
+      hazelcastPort: 5701
+      containerPort: 8022
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/camelbridge/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  notification:  # This is has a service front end for access (notification-svc.yaml)
+    serviceName: regproc-securezone-notification-stage 
+    dockerImage: mosipid/registration-processor-securezone-notification-stage:1.1.5
+    ports:
+      eventbusPort: 5712
+      hazelcastPort: 5701
+      containerPort: 8090
+      servicePort: 80 
+    ingressPath: /registrationprocessor/v1/securezone/
+    healthUrl: /registrationprocessor/v1/securezone/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  reprocess:
+    serviceName: regproc-reprocessor-stage 
+    dockerImage: mosipid/registration-processor-reprocessor-stage:1.1.5
+    ports:
+      eventbusPort: 5750
+      hazelcastPort: 5701
+      containerPort: 8021
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/reprocessor/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  uploader:
+    serviceName: regproc-packet-uploader-stage 
+    dockerImage: mosipid/registration-processor-packet-uploader-stage:1.1.5
+    ports:
+      eventbusPort: 5714
+      hazelcastPort: 5701
+      containerPort: 8087
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/uploader/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  quality:
+    serviceName: regproc-quality-checker-stage 
+    dockerImage: mosipid/registration-processor-quality-checker-stage:1.1.5
+    ports:
+      eventbusPort: 5727
+      hazelcastPort: 5701
+      containerPort: 9072
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/qualitychecker/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  validator:
+    serviceName: regproc-packet-validator-stage 
+    dockerImage: mosipid/registration-processor-packet-validator-stage:1.1.5
+    ports:
+      eventbusPort: 5715
+      hazelcastPort: 5701
+      containerPort: 8088
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/packetvalidator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  osi:
+    serviceName: regproc-osi-validator-stage 
+    dockerImage: mosipid/registration-processor-osi-validator-stage:1.1.5
+    ports:
+      eventbusPort: 5716
+      hazelcastPort: 5701
+      containerPort: 8089
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/osivalidator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  demo:
+    serviceName: regproc-demo-dedupe-stage 
+    dockerImage: mosipid/registration-processor-demo-dedupe-stage:1.1.5
+    ports:
+      eventbusPort: 5717
+      hazelcastPort: 5701
+      containerPort: 8091
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/demodedupe/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  bio:
+    serviceName: regproc-bio-dedupe-stage 
+    dockerImage: mosipid/registration-processor-bio-dedupe-stage:1.1.5
+    ports:
+      eventbusPort: 5718
+      hazelcastPort: 5701
+      containerPort: 9096
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/biodedupe/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  bioauth:
+    serviceName: regproc-biometric-authentication-stage 
+    dockerImage: mosipid/registration-processor-biometric-authentication-stage:1.1.5
+    ports:
+      eventbusPort: 5777
+      hazelcastPort: 5701
+      containerPort: 8020
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/bioauth/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  abishandler:
+    serviceName: regproc-abis-handler-stage 
+    dockerImage: mosipid/registration-processor-abis-handler-stage:1.1.5
+    ports:
+      eventbusPort: 5726
+      hazelcastPort: 5701
+      containerPort: 9071
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/abishandler/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  abismid:
+    serviceName: regproc-abis-middleware-stage 
+    dockerImage: mosipid/registration-processor-abis-middleware-stage:1.1.5
+    ports:
+      eventbusPort: 5888
+      hazelcastPort: 5701
+      containerPort: 8091
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/abismiddleware/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  manual:
+    serviceName: regproc-manual-verification-stage 
+    dockerImage: mosipid/registration-processor-manual-verification-stage:1.1.5
+    ports:
+      eventbusPort: 5720
+      hazelcastPort: 5701
+      containerPort: 8084
+      servicePort: 80
+    ingressPath: /registrationprocessor/v1/manualverification/
+    healthUrl: /registrationprocessor/v1/manualverification/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  external:
+    serviceName: regproc-external-stage 
+    dockerImage: mosipid/registration-processor-external-stage:1.1.5
+    ports:
+      eventbusPort: 5736
+      hazelcastPort: 5701
+      containerPort: 8095
+    ingressPath: ''
+    healthUrl: /registrationprocessor/v1/external/actuator/health 
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  eis: 
+    serviceName: regproc-external-integration-service 
+    dockerImage: mosipid/registration-processor-external-integration-service:1.1.5
+    ports:
+      containerPort: 8201
+      servicePort: 80
+    ingressPath: /registrationprocessor/v1/eis
+    healthUrl: /registrationprocessor/v1/eis/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  uin:
+    serviceName: regproc-uin-generator-stage 
+    dockerImage: mosipid/registration-processor-uin-generator-stage:1.1.5
+    ports:
+      eventbusPort: 5719
+      hazelcastPort: 5701
+      containerPort: 8099
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/uin-generator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  msg:
+    serviceName: regproc-message-sender-stage 
+    dockerImage: mosipid/registration-processor-message-sender-stage:1.1.5
+    ports:
+      eventbusPort: 5721
+      hazelcastPort: 5701
+      containerPort: 8088
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/sender-stage/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  print:
+    serviceName: regproc-printing-stage 
+    dockerImage: mosipid/registration-processor-printing-stage:1.1.5
+    ports:
+      eventbusPort: 5722
+      hazelcastPort: 5701
+      containerPort: 8099
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/print-stage/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  trans:
+    serviceName: regproc-registration-transaction-service 
+    dockerImage: mosipid/registration-processor-registration-transaction-service:1.1.5
+    ports:
+      containerPort: 8110
+      servicePort: 80
+    ingressPath: /registrationprocessor/v1/registrationtransaction/
+    healthUrl: /registrationprocessor/v1/registrationtransaction/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+domain: apps.mzuat.rnp.ma

@@ -1,0 +1,42 @@
+component: resident
+part-of: mosip
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+exportLogs: enabled  # Let filebeat export the logs
+
+ingress:
+   namespace: default
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+imagePullPolicy: Always
+
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+
+isGlowroot: absent 
+
+probe:
+  initialDelay: 30  # Seconds
+  period: 30 # Seconds
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  resident: 
+    serviceName: resident-service 
+    dockerImage: mosipid/resident-service:1.1.5
+    dockerTag: 1.0.10
+    containerPort: 8099
+    servicePort: 80
+    ingressPath: /resident/v1
+    healthUrl: /resident/v1/actuator/health
+    podconfig: 
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+domain: apps.mzuat.rnp.ma

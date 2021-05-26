@@ -1,0 +1,91 @@
+component: idrepo
+part-of: mosip
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+exportLogs: enabled  # Let filebeat export the logs
+
+ingress:
+   namespace: default
+artifactoryUrl: http://artifactory-service.default:80/ 
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+biosdkServiceUrl: http://13.233.66.241/biosdk-service
+
+probe:
+  initialDelay: 60  # Seconds
+  period: 30 # Seconds
+imagePullPolicy: Always
+
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+extraction_format: mock
+
+services:
+  identity:
+    serviceName: idrepo-identity-service 
+    dockerImage: mosipid/id-repository-identity-service:1.1.5
+    serviceName: idrepo-identity-service
+    containerPort: 8090
+    servicePort: 80
+    ingressPath: /idrepository/v1/identity 
+    healthUrl: /idrepository/v1/identity/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  vid: 
+    serviceName: idrepo-vid-service 
+    dockerImage: mosipid/id-repository-vid-service:1.1.5
+    containerPort: 8091
+    servicePort: 80
+    ingressPath: /idrepository/v1/vid
+    healthUrl: /idrepository/v1/actuator/health # TODO: Check this url. It does not have /vid
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  credentialrequest:
+    serviceName: idrepo-credential-request-generator
+    dockerImage: mosipid/credential-request-generator:1.1.5
+    containerPort: 8094
+    servicePort: 80
+    ingressPath: /v1/credentialrequest
+    healthUrl: /v1/credentialrequest/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  credentialservice:
+    serviceName: idrepo-credential-service
+    dockerImage: mosipid/credential-service:1.1.5
+    containerPort: 8095
+    servicePort: 80
+    ingressPath: /v1/credentialservice
+    healthUrl: /v1/credentialservice/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+generators:
+  salt:  
+    name: idrepo-salt-generator 
+    dockerImage: mosipid/id-repository-salt-generator:1.1.5
+
+domain: apps.mzuat.rnp.ma

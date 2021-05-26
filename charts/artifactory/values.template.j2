@@ -1,0 +1,17 @@
+name: artifactory-service
+docker:
+  service: {{ versions.services.artifactory.service.name }}
+  image: {{ versions.services.artifactory.service.image }}
+  containerPort: 80
+imagePullPolicy: Always
+
+dockerHub:
+  private: {{ docker.hub.private }}  
+  keyname: {{ docker.hub.keyname }}
+
+services:
+  artifactory:
+    podconfig: {{ podconfig.artifactory.service | to_yaml }}
+
+exportLogs: enabled  # Let filebeat export the logs
+domain: {{ sandbox_domain_name }}

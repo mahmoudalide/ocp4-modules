@@ -1,0 +1,171 @@
+component: kernel
+part-of: mosip
+activeProfileEnv: mz
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+runtimeDepUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/
+cont_user: mosip
+exportLogs: enabled  # Let filebeat export the logs
+probe:
+  initialDelay: 120  # Seconds
+  period: 30 # Seconds
+imagePullPolicy: Always
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  auth:
+    serviceName: kernel-auth-service 
+    dockerImage: mosipid/kernel-auth-service:1.1.5
+    containerPort: 8091
+    servicePort: 80
+    ingressPath: /v1/authmanager
+    healthUrl: /v1/authmanager/actuator/health
+    podconfig:
+      java_opts: -Xms1000M -Xmx1000M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  masterdata:
+    serviceName: kernel-masterdata-service 
+    dockerImage: mosipid/kernel-masterdata-service:1.1.5
+    containerPort: 8086
+    servicePort: 80
+    ingressPath: /v1/masterdata
+    healthUrl: /v1/masterdata/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  idgen:
+    serviceName: kernel-idgenerator-service 
+    dockerImage: mosipid/kernel-idgenerator-service:1.1.5
+    containerPort: 8080
+    servicePort: 80
+    ingressPath: /v1/idgenerator 
+    healthUrl: /v1/idgenerator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  prid:
+    serviceName: kernel-pridgenerator-service 
+    dockerImage: mosipid/kernel-pridgenerator-service:1.1.5
+    containerPort: 8100
+    servicePort: 80
+    ingressPath: /v1/pridgenerator
+    healthUrl: /v1/pridgenerator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  sync:
+    serviceName: kernel-syncdata-service 
+    dockerImage: mosipid/kernel-syncdata-service:1.1.5
+    containerPort: 8089
+    servicePort: 80
+    ingressPath: /v1/syncdata 
+    healthUrl: /v1/syncdata/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  audit:
+    serviceName: kernel-auditmanager-service 
+    dockerImage: mosipid/kernel-auditmanager-service:1.1.5
+    containerPort: 8081
+    servicePort: 80
+    ingressPath: /v1/auditmanager
+    healthUrl: /v1/auditmanager/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  key:
+    serviceName: kernel-keymanager-service 
+    dockerImage: mosipid/kernel-keymanager-service:1.1.5
+    containerPort: 8088
+    servicePort: 80
+    hsmUrl: tcp://softhsm-keymanager:80   # Should match with softhsm chart service name and port
+    ingressPath: /v1/keymanager
+    healthUrl: /v1/keymanager/actuator/health
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  notifier:
+    serviceName: kernel-notification-service 
+    dockerImage: mosipid/kernel-notification-service:1.1.5
+    containerPort: 8083
+    servicePort: 80
+    ingressPath: /v1/notifier
+    healthUrl: /v1/notifier/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  otp:
+    serviceName: kernel-otpmanager-service 
+    dockerImage: mosipid/kernel-otpmanager-service:1.1.5
+    containerPort: 8085
+    servicePort: 80
+    ingressPath: /v1/otpmanager 
+    healthUrl: /v1/otpmanager/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  rid:
+    serviceName: kernel-ridgenerator-service 
+    dockerImage: mosipid/kernel-ridgenerator-service:1.1.5
+    containerPort: 8096
+    servicePort: 80
+    ingressPath: /v1/ridgenerator 
+    healthUrl: /v1/ridgenerator/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+generators:
+  keygen:
+    name: kernel-keys-generator
+    dockerImage: mosipid/keys-generator:1.1.5
+    hsmUrl: tcp://softhsm-keymanager:80
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    
+domain: apps.mzuat.rnp.ma

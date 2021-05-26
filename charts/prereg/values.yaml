@@ -1,0 +1,90 @@
+component: prereg
+part-of: mosip
+activeProfileEnv: mz
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+probe:
+  initialDelay: 180  # Seconds
+  period: 30 # Seconds
+ingress:
+   namespace: default
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+imagePullPolicy: Always 
+isGlowroot: absent
+exportLogs: enabled  # Let filebeat export the logs
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  application:
+    serviceName: prereg-application-service 
+    dockerImage: mosipid/pre-registration-application-service:1.1.5
+    containerPort: 9090
+    servicePort: 80
+    ingressPath: /preregistration/v1
+    healthUrl: /preregistration/v1/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+  batch:
+    serviceName: prereg-batchjob-service 
+    dockerImage: mosipid/pre-registration-batchjob:1.1.5
+    containerPort: 9097
+    servicePort: 80
+    ingressPath: ""
+    #healthUrl: /preregistration/v1/actuator/health # TODO: No actuator?
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+  booking:
+    serviceName: prereg-booking-service 
+    dockerImage: mosipid/pre-registration-booking-service:1.1.5
+    containerPort: 9095
+    servicePort: 80
+    ingressPath: /preregistration/v1/appointment
+    healthUrl: /preregistration/v1/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 1
+      minReadySeconds: 10
+      replicas: 1
+  datasync:
+    serviceName: prereg-datasync-service 
+    dockerImage: mosipid/pre-registration-datasync-service:1.1.5
+    containerPort: 9094
+    servicePort: 80
+    ingressPath: /preregistration/v1/sync
+    healthUrl: /preregistration/v1/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+  ui:
+    serviceName: prereg-ui 
+    dockerImage: mosipid/pre-registration-ui:1.1.5
+    containerPort: 80
+    servicePort: 80
+    configName: prereg-ui-config # ConfigMap name
+    apiHost: https://console.apps.mzuat.rnp.ma
+    ingressPath: /pre-registration-ui
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+    
+domain: apps.mzuat.rnp.ma 

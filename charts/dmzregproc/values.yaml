@@ -1,0 +1,116 @@
+component: dmzregproc
+part-of: mosip
+activeProfileEnv: dmz 
+springConfigLabel: 1.1.5 
+configServerUrl: https://console.apps.mzuat.rnp.ma/config
+storageClass:  manual
+exportLogs: enabled  # Let filebeat export the logs
+
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+
+probe:
+  initialDelay: 30  # Seconds
+  period: 30 # Seconds
+
+ingress:
+   namespace: default
+
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://mzworker0.sb:30080/artifactory/libs-snapshot-local/io/mosip/kernel/kernel-auth-adapter/1.2.0-SNAPSHOT/kernel-auth-adapter-1.2.0-SNAPSHOT-regproc-20201209055103.jar
+
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+landing:   # Landing folder where packets land
+  pv:
+    name: landing-pv
+    size: 5Gi
+  pvc:
+    name: landing-pvc 
+    size: 5Gi
+  nfs:
+    server: 10.230.80.5
+    path:  /srv/nfs/mosip/landing 
+  mountPath: /mnt/regproc/landing # Internal pod path
+
+imagePullPolicy: Always 
+services:
+
+  receiver:
+    serviceName: regproc-packet-receiver-stage 
+    dockerImage: mosipid/registration-processor-packet-receiver-stage:1.1.5
+    ports:
+      eventbusPort: 5711
+      hazelcastPort: 5701
+      containerPort: 8081
+      servicePort: 80
+    ingressPath: /registrationprocessor/v1/packetreceiver/
+    healthUrl: /registrationprocessor/v1/packetreceiver/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 1
+      minReadySeconds: 10
+      replicas: 1
+
+  camel:
+    serviceName: regproc-camel-stage 
+    dockerImage: mosipid/registration-processor-common-camel-bridge:1.1.5
+    ports:
+      eventbusPort: 5723
+      hazelcastPort: 5701
+      containerPort: 8022
+      servicePort: 80
+    ingressPath: '' 
+    healthUrl: /registrationprocessor/v1/camelbridge/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 1
+      minReadySeconds: 10
+      replicas: 1
+
+  status:
+    serviceName: regproc-registration-status-service 
+    dockerImage: mosipid/registration-processor-registration-status-service:1.1.5
+    ports:
+      containerPort: 8083
+      servicePort: 80
+    ingressPath: /registrationprocessor/v1/registrationstatus/
+    healthUrl: /registrationprocessor/v1/registrationstatus/actuator/health
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 1
+      minReadySeconds: 10
+      replicas: 1
+
+  pktserver:
+    serviceName: regproc-dmz-packet-server 
+    dockerImage: mosipid/registration-processor-dmz-packet-server:1.0.9
+    pv:
+      name: pktserver-pv
+      size: 5Gi  # Same as landing above
+    pvc:
+      name: pktserver-pvc
+      size: 5Gi  # Same as landing above
+    nfs:
+      server: 10.230.80.5
+      path:  /srv/nfs/mosip/landing
+
+    ports:
+      containerPort: 8082
+      servicePort: 80
+    ingressPath: ''  # NOTE: Seperate ingress for pktserver due to different rewrite rule.
+    healthUrl: ''
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 1
+      minReadySeconds: 10
+      replicas: 1
+      
+domain: "apps.dmzuat.rnp.ma"

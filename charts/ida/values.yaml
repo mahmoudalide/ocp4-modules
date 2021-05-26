@@ -1,0 +1,98 @@
+component: ida
+part-of: mosip
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+exportLogs: enabled  # Let filebeat export the logs
+biosdkServiceUrl: http://13.233.66.241/biosdk-service
+
+ingress:
+   namespace: default
+artifactoryUrl: http://artifactory-service.default:80/ 
+iamAdapterUrl: http://artifactory-service.default:80/artifactory/libs-release-local/io/mosip/kernel/kernel-auth-adapter.jar
+probe:
+  initialDelay: 60  # Seconds
+  period: 30 # Seconds
+imagePullPolicy: Always
+
+sitePublicUrl: https://console.apps.mzuat.rnp.ma
+
+isGlowroot: absent 
+
+dockerHub:
+  private: False  
+  keyname: dockerhubkey
+
+services:
+  auth:
+    serviceName: ida-auth-service 
+    dockerImage: mosipid/authentication-service:1.1.5
+    containerPort: 8090
+    servicePort: 80
+    hsmUrl: tcp://softhsm-ida:80   # Should match with softhsm chart service name and port (see, ida.yml and role/softhsm)
+    ingressPath: /idauthentication/v1/auth
+    healthUrl: /idauthentication/v1/auth/actuator/health
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  internal: 
+    serviceName: ida-internal-service 
+    dockerImage: mosipid/authentication-internal-service:1.1.5
+    containerPort: 8093
+    servicePort: 80
+    hsmUrl: tcp://softhsm-ida:80   
+    ingressPath: /idauthentication/v1/internal
+    healthUrl: /idauthentication/v1/internal/actuator/health
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  kyc: 
+    serviceName: ida-kyc-service 
+    dockerImage: mosipid/authentication-kyc-service:1.1.5
+    containerPort: 8091
+    servicePort: 80
+    hsmUrl: tcp://softhsm-ida:80   
+    ingressPath: /idauthentication/v1/kyc
+    healthUrl: /idauthentication/v1/kyc/actuator/health
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+  otp: 
+    serviceName: ida-otp-service 
+    dockerImage: mosipid/authentication-otp-service:1.1.5
+    containerPort: 8092
+    servicePort: 80
+    hsmUrl: tcp://softhsm-ida:80   
+    ingressPath: /idauthentication/v1/otp
+    healthUrl: /idauthentication/v1/otp/actuator/health
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+    podconfig:
+      java_opts: -Xms500M -Xmx500M
+      maxSurge: 1
+      maxUnavailable: 0
+      minReadySeconds: 10
+      replicas: 1
+
+generators:
+  keygen:  
+    name: ida-key-generator 
+    dockerImage: mosipid/keys-generator:1.1.5
+    hsmUrl: tcp://softhsm-ida:80
+    hsmClientZipPath: artifactory/libs-release-local/hsm/client.zip
+   
+domain: apps.mzuat.rnp.ma

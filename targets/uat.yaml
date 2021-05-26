@@ -1,0 +1,26 @@
+metadata:
+  org: "Atos"
+  maintainer: "Mahmoud"
+  description: "mosip modules for uat"
+
+namespaces:
+  default:
+
+apps:
+  nfs-provisioner:
+    namespace: "default"
+    chart: "../charts/nfs-client-provisioner"
+    version: "1.2.8"
+    enabled: true
+    priority: -3
+    set:
+      "nfs.server": "10.230.80.5"
+ postgres:
+    namespace: "default"
+    chart: "../charts/postgres"
+    version: "1.0.9"
+    enabled: true
+    priority: -2
+    set:
+      "nfs.server": "10.230.80.5"
+  

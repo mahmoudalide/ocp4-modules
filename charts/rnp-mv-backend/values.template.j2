@@ -1,0 +1,39 @@
+name: rnp-mv-backend # Will be used as service name too
+docker:
+  image: mosipid/sandbox-config-server:1.1.0
+  containerPort: 8080
+  servicePort: 80
+jarName: kernel-config-server # Without .jar. Used locally for Docker
+component: rnp-mv-backend
+
+domain: {{ sandbox_domain_name }}
+internalDomain: {{ clusters.mz.nodeport_node }} 
+
+exportLogs: enabled  # Let filebeat export the logs
+
+encryptKey: '' # Passed diretly via command line
+
+sandboxPublicUrl: {{ site.sandbox_public_url }}
+
+gitRepo:
+  uri: {{ config_repo.git_repo_uri }}
+  searchFolders: {{ config_repo.search_folders }}
+  private: {{ config_repo.private }} 
+  username: {{ config_repo.gitusername }}    
+  password: '' # Passed directly via command line
+
+localRepo:
+  enabled: {{ config_repo.local_git_repo.enabled }}
+  mountPath: /opt
+  pv:
+    name: rnp-mv-backend-pv
+    size: 100Mi
+  pvc:
+    name: rnp-mv-backend-pvc
+    size: 100Mi # Should not exceed pv size
+  sc:
+    name: "nfs-provisioner"
+  nfs:
+    server: {{ nfs.server }}
+    path: /opt
+

@@ -1,0 +1,48 @@
+serviceName: reg-client-downloader
+
+activeProfileEnv: dmz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config
+artifactoryUrl: http://mz.ingress:30080
+imagePullPolicy: Always
+docker:
+  image: mosipid/registration-client:1.1.5
+  ports:
+    containerPort: 80
+    servicePort: 80
+
+version: 1.1.5
+mountPath: "/build_files"  # path inside docker
+crypto_key_env: bBQX230Wskq6XpoZ1c+Ep1D+znxfT89NxLQ7P4KFkc4=
+bootpwd: bW9zaXAxMjM0NQ==
+tpm: "N"
+certificate: "mosip_cer.cer"
+upgrade_server: https://console.apps.mzuat.rnp.ma
+healthcheck: "https://console.apps.mzuat.rnp.ma/vi/authmanager/actuator/health"
+
+sc:
+  name: "nfs-provisioner"
+pv:
+  name: reg-client-downloader
+  size: 2Mi
+pvc:
+  name: reg-client-downloader
+  size: 2Mi 
+
+nfs:
+  server: 10.230.80.5 
+  path: /srv/nfs/mosip/reg-client/
+
+probe:
+  initialDelay: 15  # Seconds
+  period: 30 # Seconds
+healthUrl: ''
+
+services:
+  reg_client_downloader:
+    podconfig: {maxSurge: 1, maxUnavailable: 0, minReadySeconds: 10, replicas: 1}
+
+
+exportLogs: enabled  # Let filebeat export the logs
+
+domain: "apps.dmzuat.rnp.ma"

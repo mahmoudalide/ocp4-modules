@@ -1,0 +1,15 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: rnp-mv-backend-pvc
+spec:
+  storageClassName: "nfs-provisioner"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    matchLabels:
+      name: rnp-mv-backend-pv

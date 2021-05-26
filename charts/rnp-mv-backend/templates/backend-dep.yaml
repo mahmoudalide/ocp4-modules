@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rnp-mv-backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rnp-mv-backend
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: rnp-mv-backend
+        exportLogs: enabled
+    spec:
+      containers:
+      - env:
+        - name: JDK_JAVA_OPTIONS
+          value: -Xms500M -Xmx500M
+        image: asibrahim/mv-backend:1.0.5
+        imagePullPolicy: Always
+        name: rnp-mv-backend
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /version
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: opt
+          mountPath: /opt
+      volumes:
+      - name: opt 
+        persistentVolumeClaim:
+          claimName: rnp-mv-backend-pvc 

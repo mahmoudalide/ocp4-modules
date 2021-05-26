@@ -1,0 +1,36 @@
+serviceName: softhsm-ida
+
+activeProfileEnv: mz 
+springConfigLabel: 1.1.5 
+configServerUrl: http://config-server.default:80/config`
+artifactoryUrl: http://artifactory-service.default:80/ 
+
+exportLogs: enabled  # Let filebeat export the logs
+
+docker:
+  image: mosipdev/softhsm
+  tag: v1
+  ports:
+    containerPort: 5666
+    servicePort: 80
+
+confFile: softhsm2.conf
+mountPath: /softhsm  # path inside docker
+
+sc:
+  name: ""
+pv:
+  name: softhsm-ida-pv
+  size: 20Mi
+pvc:
+  name: softhsm-ida-pvc
+  size: 20Mi 
+
+nfs:
+  server: 10.230.80.5 
+  path: /srv/nfs/mosip/softhsm/ida/
+
+probe:
+  initialDelay: 15  # Seconds
+  period: 30 # Seconds
+healthUrl: ''
