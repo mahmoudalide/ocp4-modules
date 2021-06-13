@@ -18,7 +18,7 @@ confFile: softhsm2.conf
 mountPath: /softhsm  # path inside docker
 
 sc:
-  name: ""
+  name: "nfs-provisioner"
 pv:
   name: softhsm-ida-pv
   size: 20Mi

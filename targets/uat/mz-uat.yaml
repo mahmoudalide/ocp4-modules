@@ -1,0 +1,245 @@
+metadata:
+  org: "Atos"
+  maintainer: "Mahmoud"
+  description: "mosip modules for uat"
+
+namespaces:
+  default:
+helmRepos:
+  bitnami: "https://charts.bitnami.com/bitnami"
+ 
+apps:
+  nfs-provisioner:
+    namespace: "default"
+    chart: "../charts/nfs-client-provisioner"
+    version: "1.2.8"
+    enabled: true
+    priority: -5
+    set:
+      "nfs.server": "10.230.80.5"
+    group: all
+
+  postgres:
+    namespace: "default"
+    chart: "../charts/postgres"
+    version: "1.0.9"
+    enabled: true
+    priority: -4
+    set:
+      "nfs.server": "10.230.80.5"
+    group: all
+  
+  activemq:
+    namespace: "default"
+    chart: "../charts/activemq"
+    version: "latest"
+    enabled: true
+    priority: -3
+    set:
+      "nfs.server": "10.230.80.5"
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  keycloak:
+    namespace: "default"
+    chart: "../charts/keycloak"
+    version: "0.1.0"
+    enabled: true
+    priority: -3
+    set:
+      "nfs.server": "10.230.80.5"
+      "domain": "apps.mzuat.rnp.ma"
+      "db.host": "10.230.80.5"
+      "db.port": "5432"
+    group: all
+
+  clamav:
+    namespace: "default"
+    chart: "../charts/clamav"
+    version: "1.1.0"
+    enabled: true
+    priority: -3
+    group: all
+
+  minio:
+    namespace: "default"
+    chart: "../charts/minio"
+    version: "6.0.5"
+    enabled: true
+    priority: -3
+    set:
+      "nfs.server": "10.230.80.5"
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+  
+  artifactory:
+    namespace: "default"
+    chart: "../charts/artifactory"
+    version: "1.1.2"
+    enabled: true
+    priority: -3
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  kafka:
+    namespace: "default"
+    chart: "bitnami/kafka"
+    valuesFile: ../charts/kafka/values.yaml
+    version: "12.18.3"
+    enabled: true
+    priority: -3
+    group: all
+
+  config-server:
+    namespace: "default"
+    chart: "../charts/config-server"
+    version: "1.0.9"
+    enabled: true
+    priority: -3
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+      "localRepo.nfs.server": "10.230.80.5"
+    group: all
+
+  kernel:
+    namespace: "default"
+    chart: "../charts/kernel"
+    version: "1.0.9"
+    enabled: true
+    priority: -2
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  softhsm-keymanager:
+    namespace: "default"
+    chart: "../charts/softhsm"
+    version: "1.0.9"
+    enabled: true
+    priority: -3
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+      "nfs.server": "10.230.80.5"
+    group: all
+
+  packetmanager:
+    namespace: "default"
+    chart: "../charts/packetmanager"
+    version: "1.0.2"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  datashare:
+    namespace: "default"
+    chart: "../charts/datashare"
+    version: "1.0.2"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  prereg:
+    namespace: "default"
+    chart: "../charts/prereg"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  regproc:
+    namespace: "default"
+    chart: "../charts/regproc"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  regproc:
+    namespace: "default"
+    chart: "../charts/regproc"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  softhsm-ida:
+    namespace: "default"
+    chart: "../charts/softhsm"
+    version: "1.0.9"
+    enabled: true
+    priority: -3
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+      "nfs.server": "10.230.80.5"
+    group: all
+
+  ida:
+    namespace: "default"
+    chart: "../charts/softhsm"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  idrepo:
+    namespace: "default"
+    chart: "../charts/idrepo"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  pms:
+    namespace: "default"
+    chart: "../charts/pms"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  resident:
+    namespace: "default"
+    chart: "../charts/resident"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  admin:
+    namespace: "default"
+    chart: "../charts/admin"
+    version: "1.0.9"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all
+
+  print:
+    namespace: "default"
+    chart: "../charts/print"
+    version: "1.1.2"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.mzuat.rnp.ma"
+    group: all

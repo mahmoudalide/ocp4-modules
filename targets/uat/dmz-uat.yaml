@@ -1,0 +1,69 @@
+metadata:
+  org: "Atos"
+  maintainer: "Mahmoud"
+  description: "mosip modules for uat"
+
+namespaces:
+  default:
+helmRepos:
+  bitnami: "https://charts.bitnami.com/bitnami"
+ 
+apps:
+  nfs-provisioner:
+    namespace: "default"
+    chart: "../charts/nfs-client-provisioner"
+    version: "1.2.8"
+    enabled: true
+    priority: -5
+    set:
+      "nfs.server": "10.230.80.5"
+    group: all
+
+  clamav:
+    namespace: "default"
+    chart: "../charts/clamav"
+    version: "1.1.0"
+    enabled: true
+    priority: -3
+    group: all
+
+  kafka:
+    namespace: "default"
+    chart: "bitnami/kafka"
+    valuesFile: ../charts/kafka/values.yaml
+    version: "12.18.3"
+    enabled: true
+    priority: -3
+    group: all
+    
+  websub:
+    namespace: "default"
+    chart: "../charts/websub"
+    version: "1.1.2"
+    enabled: true
+    priority: -2
+    set:
+      "domain": "apps.dmzuat.rnp.ma"
+    group: all
+
+  dmzregproc:
+    namespace: "default"
+    chart: "../charts/dmzregproc"
+    version: "1.0.9"
+    enabled: true
+    priority: -2
+    set:
+      "domain": "apps.dmzuat.rnp.ma"
+      "landing.nfs.server": "10.230.80.5"
+    group: all
+
+  reg-client-downloader:
+    namespace: "default"
+    chart: "../charts/reg-client-downloader"
+    version: "1.1.2"
+    enabled: true
+    priority: -1
+    set:
+      "domain": "apps.dmzuat.rnp.ma"
+      "nfs.server": "10.230.80.5"
+    group: all     
