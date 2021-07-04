@@ -16,7 +16,7 @@ apps:
     enabled: true
     priority: -5
     set:
-      "nfs.server": "10.230.80.5"
+      "nfs.server": "178.18.241.82"
     group: all
 
   clamav:
@@ -43,7 +43,7 @@ apps:
     enabled: true
     priority: -2
     set:
-      "domain": "apps.dmzuat.rnp.ma"
+      "domain": "apps.dmz.mosip.dev"
     group: all
 
   dmzregproc:
@@ -53,8 +53,8 @@ apps:
     enabled: true
     priority: -2
     set:
-      "domain": "apps.dmzuat.rnp.ma"
-      "landing.nfs.server": "10.230.80.5"
+      "domain": "apps.dmz.mosip.dev"
+      "landing.nfs.server": "178.18.241.82"
     group: all
 
   reg-client-downloader:
@@ -64,6 +64,6 @@ apps:
     enabled: true
     priority: -1
     set:
-      "domain": "apps.dmzuat.rnp.ma"
-      "nfs.server": "10.230.80.5"
+      "domain": "apps.dmz.mosip.dev"
+      "nfs.server": "178.18.241.82"
     group: all     

@@ -18,7 +18,7 @@ cp ./reg-client-prep/templates/mosip_cer.cer /srv/nfs/mosip/reg-client/
 cp ./reg-client-prep/templates/maven-metadata.xml /srv/nfs/mosip/reg-client/
 
 
-helmsman --dry-run -f targets/uat.yaml -group all
+helmsman --dry-run -f targets/mz-uat.yaml -group all
 
 
-./ida_zk.py --server {{site.sandbox_internal_url}} --disable_ssl_verify
+#./ida_zk.py --server {{site.sandbox_internal_url}} --disable_ssl_verify
