@@ -18,16 +18,6 @@ apps:
     set:
       "nfs.server": "178.18.241.82"
     group: all
-
-  postgres:
-    namespace: "custom-rnp"
-    chart: "../charts/postgres"
-    version: "1.0.9"
-    enabled: false
-    priority: -4
-    set:
-      "nfs.server": "178.18.241.82"
-    group: all
   
   activemq:
     namespace: "custom-rnp"
