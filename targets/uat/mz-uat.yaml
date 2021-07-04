@@ -4,13 +4,13 @@ metadata:
   description: "mosip modules for uat"
 
 namespaces:
-  default:
+  custom-rnp:
 helmRepos:
   bitnami: "https://charts.bitnami.com/bitnami"
  
 apps:
   nfs-provisioner:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/nfs-client-provisioner"
     version: "1.2.8"
     enabled: true
@@ -20,7 +20,7 @@ apps:
     group: all
 
   postgres:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/postgres"
     version: "1.0.9"
     enabled: false
@@ -30,7 +30,7 @@ apps:
     group: all
   
   activemq:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/activemq"
     version: "latest"
     enabled: false
@@ -41,7 +41,7 @@ apps:
     group: all
 
   keycloak:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/keycloak"
     version: "0.1.0"
     enabled: true
@@ -54,7 +54,7 @@ apps:
     group: all
 
   clamav:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/clamav"
     version: "1.1.0"
     enabled: true
@@ -62,7 +62,7 @@ apps:
     group: all
 
   minio:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/minio"
     version: "6.0.5"
     enabled: true
@@ -73,7 +73,7 @@ apps:
     group: all
   
   artifactory:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/artifactory"
     version: "1.1.2"
     enabled: true
@@ -83,7 +83,7 @@ apps:
     group: all
 
   kafka:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "bitnami/kafka"
     valuesFile: ../charts/kafka/values.yaml
     version: "12.18.3"
@@ -92,7 +92,7 @@ apps:
     group: all
 
   config-server:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/config-server"
     version: "1.0.9"
     enabled: true
@@ -104,7 +104,7 @@ apps:
     group: all
 
   kernel:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/kernel"
     version: "1.0.9"
     enabled: true
@@ -116,7 +116,7 @@ apps:
     group: all
 
   softhsm-keymanager:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/softhsm"
     version: "1.0.9"
     enabled: true
@@ -127,7 +127,7 @@ apps:
     group: all
 
   packetmanager:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/packetmanager"
     version: "1.0.2"
     enabled: true
@@ -137,7 +137,7 @@ apps:
     group: all
 
   datashare:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/datashare"
     version: "1.0.2"
     enabled: true
@@ -147,7 +147,7 @@ apps:
     group: all
 
   prereg:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/prereg"
     version: "1.0.9"
     enabled: true
@@ -157,17 +157,7 @@ apps:
     group: all
 
   regproc:
-    namespace: "default"
-    chart: "../charts/regproc"
-    version: "1.0.9"
-    enabled: true
-    priority: -1
-    set:
-      "domain": "apps.mz.mosip.dev"
-    group: all
-
-  regproc:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/regproc"
     version: "1.0.9"
     enabled: true
@@ -177,7 +167,7 @@ apps:
     group: all
 
   softhsm-ida:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/softhsm"
     version: "1.0.9"
     enabled: true
@@ -188,7 +178,7 @@ apps:
     group: all
 
   ida:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/softhsm"
     version: "1.0.9"
     enabled: true
@@ -198,7 +188,7 @@ apps:
     group: all
 
   idrepo:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/idrepo"
     version: "1.0.9"
     enabled: true
@@ -208,7 +198,7 @@ apps:
     group: all
 
   pms:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/pms"
     version: "1.0.9"
     enabled: true
@@ -218,7 +208,7 @@ apps:
     group: all
 
   resident:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/resident"
     version: "1.0.9"
     enabled: true
@@ -228,7 +218,7 @@ apps:
     group: all
 
   admin:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/admin"
     version: "1.0.9"
     enabled: true
@@ -238,7 +228,7 @@ apps:
     group: all
 
   print:
-    namespace: "default"
+    namespace: "custom-rnp"
     chart: "../charts/print"
     version: "1.1.2"
     enabled: true
