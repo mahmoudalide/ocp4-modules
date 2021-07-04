@@ -11,7 +11,7 @@ helmRepos:
 apps:
   nfs-provisioner:
     namespace: "custom-rnp"
-    chart: "../charts/nfs-client-provisioner"
+    chart: "../../charts/nfs-client-provisioner"
     version: "1.2.8"
     enabled: true
     priority: -5
@@ -21,7 +21,7 @@ apps:
   
   activemq:
     namespace: "custom-rnp"
-    chart: "../charts/activemq"
+    chart: "../../charts/activemq"
     version: "latest"
     enabled: false
     priority: -3
@@ -32,7 +32,7 @@ apps:
 
   keycloak:
     namespace: "custom-rnp"
-    chart: "../charts/keycloak"
+    chart: "../../charts/keycloak"
     version: "0.1.0"
     enabled: true
     priority: -3
@@ -45,7 +45,7 @@ apps:
 
   clamav:
     namespace: "custom-rnp"
-    chart: "../charts/clamav"
+    chart: "../../charts/clamav"
     version: "1.1.0"
     enabled: true
     priority: -3
@@ -53,7 +53,7 @@ apps:
 
   minio:
     namespace: "custom-rnp"
-    chart: "../charts/minio"
+    chart: "../../charts/minio"
     version: "6.0.5"
     enabled: true
     priority: -3
@@ -64,7 +64,7 @@ apps:
   
   artifactory:
     namespace: "custom-rnp"
-    chart: "../charts/artifactory"
+    chart: "../../charts/artifactory"
     version: "1.1.2"
     enabled: true
     priority: -3
@@ -75,7 +75,7 @@ apps:
   kafka:
     namespace: "custom-rnp"
     chart: "bitnami/kafka"
-    valuesFile: ../charts/kafka/values.yaml
+    valuesFile: ../../charts/kafka/values.yaml
     version: "12.18.3"
     enabled: true
     priority: -3
@@ -83,7 +83,7 @@ apps:
 
   config-server:
     namespace: "custom-rnp"
-    chart: "../charts/config-server"
+    chart: "../../charts/config-server"
     version: "1.0.9"
     enabled: true
     priority: -3
@@ -95,7 +95,7 @@ apps:
 
   kernel:
     namespace: "custom-rnp"
-    chart: "../charts/kernel"
+    chart: "../../charts/kernel"
     version: "1.0.9"
     enabled: true
     priority: -2
@@ -107,7 +107,7 @@ apps:
 
   softhsm-keymanager:
     namespace: "custom-rnp"
-    chart: "../charts/softhsm"
+    chart: "../../charts/softhsm"
     version: "1.0.9"
     enabled: true
     priority: -3
@@ -118,7 +118,7 @@ apps:
 
   packetmanager:
     namespace: "custom-rnp"
-    chart: "../charts/packetmanager"
+    chart: "../../charts/packetmanager"
     version: "1.0.2"
     enabled: true
     priority: -1
@@ -128,7 +128,7 @@ apps:
 
   datashare:
     namespace: "custom-rnp"
-    chart: "../charts/datashare"
+    chart: "../../charts/datashare"
     version: "1.0.2"
     enabled: true
     priority: -1
@@ -138,7 +138,7 @@ apps:
 
   prereg:
     namespace: "custom-rnp"
-    chart: "../charts/prereg"
+    chart: "../../charts/prereg"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -148,7 +148,7 @@ apps:
 
   regproc:
     namespace: "custom-rnp"
-    chart: "../charts/regproc"
+    chart: "../../charts/regproc"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -158,7 +158,7 @@ apps:
 
   softhsm-ida:
     namespace: "custom-rnp"
-    chart: "../charts/softhsm"
+    chart: "../../charts/softhsm"
     version: "1.0.9"
     enabled: true
     priority: -3
@@ -169,7 +169,7 @@ apps:
 
   ida:
     namespace: "custom-rnp"
-    chart: "../charts/softhsm"
+    chart: "../../charts/softhsm"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -179,7 +179,7 @@ apps:
 
   idrepo:
     namespace: "custom-rnp"
-    chart: "../charts/idrepo"
+    chart: "../../charts/idrepo"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -189,7 +189,7 @@ apps:
 
   pms:
     namespace: "custom-rnp"
-    chart: "../charts/pms"
+    chart: "../../charts/pms"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -199,7 +199,7 @@ apps:
 
   resident:
     namespace: "custom-rnp"
-    chart: "../charts/resident"
+    chart: "../../charts/resident"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -209,7 +209,7 @@ apps:
 
   admin:
     namespace: "custom-rnp"
-    chart: "../charts/admin"
+    chart: "../../charts/admin"
     version: "1.0.9"
     enabled: true
     priority: -1
@@ -219,7 +219,7 @@ apps:
 
   print:
     namespace: "custom-rnp"
-    chart: "../charts/print"
+    chart: "../../charts/print"
     version: "1.1.2"
     enabled: true
     priority: -1
