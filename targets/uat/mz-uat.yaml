@@ -44,6 +44,8 @@ apps:
       "db.port": "5444"
       "keycloakPassword": "admin"
       "db.password": "mosip123"
+      "keycloakExternalUrl": "https://console.apps.mz.mosip.dev/auth/"
+      "domain": "apps.mz.mosip.dev"
     group: all
 
   clamav:
