@@ -41,7 +41,9 @@ apps:
       "ingress.namespace": "custom-rnp"
       "domain": "apps.mz.mosip.dev"
       "db.host": "178.18.241.82"
-      "db.port": "5432"
+      "db.port": "5444"
+      "keycloakPassword": "admin"
+      "db.password": "mosip123"
     group: all
 
   clamav:

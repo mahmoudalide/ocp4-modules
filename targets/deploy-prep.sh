@@ -17,6 +17,8 @@ cp -R ./softhsm-prep/files/tokens /srv/nfs/mosip/softhsm/ida
 cp ./reg-client-prep/templates/mosip_cer.cer /srv/nfs/mosip/reg-client/
 cp ./reg-client-prep/templates/maven-metadata.xml /srv/nfs/mosip/reg-client/
 
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum install -y ansible
 
 helmsman --dry-run -f targets/mz-uat.yaml -group all
 
