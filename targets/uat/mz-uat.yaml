@@ -13,7 +13,7 @@ apps:
     namespace: "custom-rnp"
     chart: "../../charts/nfs-client-provisioner"
     version: "1.2.8"
-    enabled: true
+    enabled: false
     priority: -5
     set:
       "nfs.server": "178.18.241.82"
@@ -38,6 +38,7 @@ apps:
     priority: -3
     set:
       "nfs.server": "178.18.241.82"
+      "ingress.namespace": "custom-rnp"
       "domain": "apps.mz.mosip.dev"
       "db.host": "178.18.241.82"
       "db.port": "5432"
