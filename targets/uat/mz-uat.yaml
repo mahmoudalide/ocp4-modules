@@ -40,12 +40,11 @@ apps:
       "nfs.server": "178.18.241.82"
       "ingress.namespace": "custom-rnp"
       "domain": "apps.mz.mosip.dev"
-      "db.host": "178.18.241.82"
+      "db.host": "178.18.241.80"
       "db.port": "5444"
       "keycloakPassword": "admin"
       "db.password": "mosip123"
       "keycloakExternalUrl": "https://console.apps.mz.mosip.dev/auth/"
-      "domain": "apps.mz.mosip.dev"
     group: all
 
   clamav:
